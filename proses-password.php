@@ -16,40 +16,45 @@ use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
-$mail = new PHPMailer(true);
+$mail       = new PHPMailer(true);
 $sesi       = $_SESSION['pw'];
 $data_query = "SELECT * FROM tb_user WHERE email = '$sesi'";
 $a          = mysqli_query($conn, $data_query);
 $row        = $a->fetch_assoc();
-try {
-    $mail->isSMTP();                                            //Send using SMTP
-    $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
-    $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-    $mail->Username   = 'if21.muhammadfathurohma@mhs.ubpkarawang.ac.id';                     //SMTP username
-    $mail->Password   = 'ubpk2021';                               //SMTP password
-    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
-    $mail->Port       = 465;
-    
-    //Recipients
-    $mail->setFrom('finalproject@kelompok-1.com', 'Final-Project - Ganti Password');
-    $mail->addAddress($row['email'], $row['nama']);     //Add a recipient
-    // $mail->addAddress('ellen@example.com');               //Name is optional
-    $mail->addReplyTo('finalproject@kelompok-1.com', 'Link Verifikasi Login');
-    // $mail->addCC('');
-    // $mail->addBCC('bcc@example.com');
-    
-    //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Hallo '.$row['nama'].'!';
-    $mail->Body    = 'Untuk melanjutkan login, berikut adalah Kode OTP <b>'.$row['code'].'</b>';
-    // $mail->Body    = 'Terimakasih! Telah register';
-    $mail->AltBody = 'Terimakasih telah register !';
-    $mail->send();
-    
-} catch (Exception $e) {
-    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
-    die;
+
+
+if (isset($_SESSION['cek-email'])) {
+    try {
+        $mail->isSMTP();                                            //Send using SMTP
+        $mail->Host       = 'smtp.gmail.com';                     //Set the SMTP server to send through
+        $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
+        $mail->Username   = 'if21.muhammadfathurohma@mhs.ubpkarawang.ac.id';                     //SMTP username
+        $mail->Password   = 'ubpk2021';                               //SMTP password
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;            //Enable implicit TLS encryption
+        $mail->Port       = 465;
+        
+        //Recipients
+        $mail->setFrom('finalproject@kelompok-1.com', 'Final-Project - Ganti Password');
+        $mail->addAddress($row['email'], $row['nama']);     //Add a recipient
+        // $mail->addAddress('ellen@example.com');               //Name is optional
+        $mail->addReplyTo('finalproject@kelompok-1.com', 'Link Verifikasi Login');
+        // $mail->addCC('');
+        // $mail->addBCC('bcc@example.com');
+        
+        //Content
+        $mail->isHTML(true);                                  //Set email format to HTML
+        $mail->Subject = 'Hallo '.$row['nama'].'!';
+        $mail->Body    = 'Untuk melanjutkan login, berikut adalah Kode OTP <b>'.$row['code'].'</b>';
+        // $mail->Body    = 'Terimakasih! Telah register';
+        $mail->AltBody = 'Terimakasih telah register !';
+        $mail->send();
+        unset($_SESSION['cek-email']);
+    } catch (Exception $e) {
+        echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        die;
+    }
 }
+
 
     if (isset($_POST['kirim'])) {
         $code       = $_POST['code'];
@@ -58,6 +63,7 @@ try {
         
         if (mysqli_num_rows($result) > 0) {
             header('Location:reset-password.php');
+            
         } else {
             $error = "Kode OTP Salah!";
         }

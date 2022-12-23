@@ -63,14 +63,32 @@ function register($data) {
 	$email = mysqli_real_escape_string($conn, $email);
 
 	// jika username sudah terdaftar
+	$a = mysqli_query($conn, "SELECT * FROM tb_user WHERE username = '$username'");
+	$b = mysqli_query($conn, "SELECT * FROM tb_user WHERE email = '$email'");
 
-	if(mysqli_query($conn, "SELECT * FROM user WHERE username = '$username'")) {
+	if(mysqli_num_rows($a) >= 1) {
 		echo "<script>alert('Username sudah terdaftar!');window.location='register.php';</script>";
 	}
+	elseif(mysqli_num_rows($b) >= 1) {
+		echo "<script>alert('Email sudah terdaftar!');window.location='register.php';</script>";
+	}
 
-	if($password != $password2) {
+
+	elseif($password != $password2) {
 		echo "<script>alert('konfirmasi password salah.');</script>";
 		return false;
+	}else {
+		$password = password_hash($password, PASSWORD_DEFAULT);
+		$query = mysqli_query($conn, "INSERT INTO tb_user (username,password,nama,foto,email) VALUES ('$username','$password','$nama','default.jpg','$email')");
+		if ($query) {
+			
+			return $conn->affected_rows;
+		}else {
+			mysqli_error($conn);
+		}
+
+		// $conn->query("INSERT INTO tb_user VALUES (null, '$username', '$password', '$nama', 'default.jpg', $email)") or die(mysqli_error($conn));
+		return $conn->affected_rows;
 	}
 
 	// if(strlen($username) < 6 ) {
@@ -84,18 +102,6 @@ function register($data) {
 	// 	return false;
 	// }
 
-	$password = password_hash($password, PASSWORD_DEFAULT);
-	$query = mysqli_query($conn, "INSERT INTO tb_user (username,password,nama,foto,email) VALUES ('$username','$password','$nama','default.jpg','$email')");
-	if ($query) {
-		$cek = mysqli_query($conn, "SELECT * FROM tb_user WHERE nama = '$nama'");
-		// $row = $cek->fetch_assoc();
-		
-		return $conn->affected_rows;
-	}else {
-		mysqli_error($conn);
-	}
-
-	// $conn->query("INSERT INTO tb_user VALUES (null, '$username', '$password', '$nama', 'default.jpg', $email)") or die(mysqli_error($conn));
-	return $conn->affected_rows;
+	
 }
 

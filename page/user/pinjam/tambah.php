@@ -76,7 +76,7 @@ if(isset($_POST['tambah'])) {
         <label class="small mb-1" for="nama_anggota">Nama</label>
         <select name="nama" id="nama_anggota" class="form-control">
             <?php 
-            if($pecahAnggota = $tampilNamaAnggota->fetch_assoc()) {
+            $pecahAnggota = $tampilNamaAnggota->fetch_assoc(); {
             echo "<option value='$pecahAnggota[id_anggota].$pecahAnggota[nama_anggota]'>$pecahAnggota[nim].$pecahAnggota[nama_anggota]</option>";
             }
             ?>

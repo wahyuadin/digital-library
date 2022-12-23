@@ -15,6 +15,7 @@ if (isset($_POST['kirim'])) {
     if (mysqli_num_rows($result) > 0) {
         mysqli_query($conn, "UPDATE tb_user SET code = '$code' WHERE email = '$email' ");
         $_SESSION['pw'] = $email;
+        $_SESSION['cek-email'] = "true";
         header('Location:proses-password.php');
     } else {
         $error = "Alamat Email Tidak Terdaftar!";

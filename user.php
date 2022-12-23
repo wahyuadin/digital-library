@@ -20,8 +20,7 @@ if (isset($_POST['kirim'])) {
     
         $query = mysqli_query($conn, "INSERT INTO tb_anggota (nim,nama_anggota,tempat_lahir,tgl_lahir,jk,prodi) VALUES ('$nim','$nama','$tempat','$ttl','$jk','$prodi')");
         if ($query) {
-            mysqli_query($conn, "UPDATE tb_user SET status = '1'");
-            $_SESSION['data-status'] = "Form Berhasil di input! Jika ada data yang salah, silahkan hubungi admin.";
+            mysqli_query($conn, "UPDATE tb_user SET status = '1', nama = '$nama'");
         } else {
             echo "error";
             die;
