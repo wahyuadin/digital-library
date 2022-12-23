@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jul 13, 2020 at 11:49 AM
--- Server version: 10.4.13-MariaDB
--- PHP Version: 7.4.7
+-- Host: 127.0.0.1
+-- Waktu pembuatan: 23 Des 2022 pada 11.38
+-- Versi server: 10.4.25-MariaDB
+-- Versi PHP: 7.4.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -24,12 +24,12 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_anggota`
+-- Struktur dari tabel `tb_anggota`
 --
 
 CREATE TABLE `tb_anggota` (
   `id_anggota` int(11) NOT NULL,
-  `nim` int(11) NOT NULL,
+  `nim` int(255) NOT NULL,
   `nama_anggota` varchar(50) NOT NULL,
   `tempat_lahir` varchar(100) NOT NULL,
   `tgl_lahir` date NOT NULL,
@@ -38,17 +38,18 @@ CREATE TABLE `tb_anggota` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tb_anggota`
+-- Dumping data untuk tabel `tb_anggota`
 --
 
 INSERT INTO `tb_anggota` (`id_anggota`, `nim`, `nama_anggota`, `tempat_lahir`, `tgl_lahir`, `jk`, `prodi`) VALUES
-(2, 323432111, 'watiq', 'bandung', '1998-01-01', 'P', 'Teknik Management'),
-(3, 3432123, 'Rudi Tabuti', 'Palembang', '1998-07-02', 'L', 'Sistem Operasi');
+(1, 2147483647, 'M Wahyu Adi Nugroho', 'Rembang', '2000-06-23', 'L', 'Teknik Informatika'),
+(2, 39842, 'galih', 'karawang', '1999-03-04', 'L', 'Teknik Informatika'),
+(3, 39842, 'galih', 'karawang', '2022-12-05', 'P', 'ladmls');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_buku`
+-- Struktur dari tabel `tb_buku`
 --
 
 CREATE TABLE `tb_buku` (
@@ -64,17 +65,17 @@ CREATE TABLE `tb_buku` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tb_buku`
+-- Dumping data untuk tabel `tb_buku`
 --
 
 INSERT INTO `tb_buku` (`id_buku`, `judul_buku`, `pengarang_buku`, `penerbit_buku`, `tahun_terbit`, `isbn`, `jumlah_buku`, `lokasi`, `tgl_input`) VALUES
-(4, 'Belajar HTML', 'surya', 'Erlangga', '2018', '234312', 3, 'Rak 3', '2020-07-21'),
-(6, 'Belajar Codeigniter', 'ridho', 'budi store', '2019', '45234521', 10, 'Rak 2', '2020-07-27');
+(4, 'Belajar HTML', 'surya', 'Erlangga', '2018', '234312', 2, 'Rak 3', '2020-07-21'),
+(6, 'Belajar Codeigniter', 'ridho', 'budi store', '2019', '45234521', 6, 'Rak 2', '2020-07-27');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_transaksi`
+-- Struktur dari tabel `tb_transaksi`
 --
 
 CREATE TABLE `tb_transaksi` (
@@ -88,18 +89,17 @@ CREATE TABLE `tb_transaksi` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tb_transaksi`
+-- Dumping data untuk tabel `tb_transaksi`
 --
 
 INSERT INTO `tb_transaksi` (`id_transaksi`, `id_buku`, `nim_transaksi`, `id_anggota`, `tgl_pinjam`, `tgl_kembali`, `status`) VALUES
-(7, 4, 2, 2, '01-07-2020', '23-07-2020', 'kembali'),
-(8, 6, 3, 3, '01-07-2020', '5-07-2020', 'pinjam'),
-(11, 4, 3, 3, '13-07-2020', '20-07-2020', 'pinjam');
+(1, 6, 1, 1, '23-12-2022', '30-12-2022', 'pinjam'),
+(2, 4, 2, 2, '23-12-2022', '30-12-2022', 'pinjam');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `tb_user`
+-- Struktur dari tabel `tb_user`
 --
 
 CREATE TABLE `tb_user` (
@@ -107,71 +107,78 @@ CREATE TABLE `tb_user` (
   `username` varchar(50) NOT NULL,
   `password` varchar(255) NOT NULL,
   `nama` varchar(50) NOT NULL,
-  `foto` varchar(255) NOT NULL
+  `foto` varchar(255) NOT NULL DEFAULT 'default.jpg',
+  `email` varchar(255) NOT NULL,
+  `verif` varchar(10) NOT NULL DEFAULT 'tidak',
+  `user` varchar(10) NOT NULL DEFAULT '1',
+  `code` varchar(255) NOT NULL,
+  `param` text NOT NULL,
+  `status` varchar(10) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
--- Dumping data for table `tb_user`
+-- Dumping data untuk tabel `tb_user`
 --
 
-INSERT INTO `tb_user` (`id_user`, `username`, `password`, `nama`, `foto`) VALUES
-(2, 'harun', '$2y$10$0ytYJF98cGtxAe88cu4B3ekzNYHA1ViwnKGXSDWp00gDwykd.og8.', 'harun', '5f0b28b0c14b3.jpg');
+INSERT INTO `tb_user` (`id_user`, `username`, `password`, `nama`, `foto`, `email`, `verif`, `user`, `code`, `param`, `status`) VALUES
+(1, 'galih', '$2y$10$Jb/aJyurORnW4qoApWcffOmRl5FiZha7WmxKxqHwmOrifJ28Y.1Dm', 'galih', 'default.jpg', 'pnono3930@gmail.com', 'ya', '1', '', '', '1'),
+(2, 'adin', '$2y$10$u9ABfb88hAay/nudyciV..Wr4PRXv.QmLP1sjN3wJ9WdvY5qIMAhq', 'galih', 'default.jpg', 'wahyuadinugraha2@gmail.com', 'tidak', '1', '', '', '1');
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `tb_anggota`
+-- Indeks untuk tabel `tb_anggota`
 --
 ALTER TABLE `tb_anggota`
   ADD PRIMARY KEY (`id_anggota`);
 
 --
--- Indexes for table `tb_buku`
+-- Indeks untuk tabel `tb_buku`
 --
 ALTER TABLE `tb_buku`
   ADD PRIMARY KEY (`id_buku`);
 
 --
--- Indexes for table `tb_transaksi`
+-- Indeks untuk tabel `tb_transaksi`
 --
 ALTER TABLE `tb_transaksi`
   ADD PRIMARY KEY (`id_transaksi`);
 
 --
--- Indexes for table `tb_user`
+-- Indeks untuk tabel `tb_user`
 --
 ALTER TABLE `tb_user`
   ADD PRIMARY KEY (`id_user`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT untuk tabel yang dibuang
 --
 
 --
--- AUTO_INCREMENT for table `tb_anggota`
+-- AUTO_INCREMENT untuk tabel `tb_anggota`
 --
 ALTER TABLE `tb_anggota`
   MODIFY `id_anggota` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `tb_buku`
+-- AUTO_INCREMENT untuk tabel `tb_buku`
 --
 ALTER TABLE `tb_buku`
-  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_buku` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `tb_transaksi`
+-- AUTO_INCREMENT untuk tabel `tb_transaksi`
 --
 ALTER TABLE `tb_transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `tb_user`
+-- AUTO_INCREMENT untuk tabel `tb_user`
 --
 ALTER TABLE `tb_user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
